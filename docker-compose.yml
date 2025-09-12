@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: aquamind-db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: aquamind
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-aquamind123}
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+    networks:
+      - aquamind-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aquamind-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGO_URI=mongodb://aquamind:${MONGO_PASSWORD:-aquamind123}@mongodb:27017/aquamind?authSource=admin
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_PROJECT=${OPENAI_PROJECT}
+    depends_on:
+      - mongodb
+    ports:
+      - "5000:5000"
+    networks:
+      - aquamind-network
+    volumes:
+      - ./backend/logs:/app/logs
+
+  # Frontend (Nginx serving built React app)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: aquamind-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - aquamind-network
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  aquamind-network:
+    driver: bridge

@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AquaMind Design System - Water-themed modern UI */
+
+@layer base {
+  :root {
+    /* Water-themed color palette */
+    --background: 210 40% 98%;
+    --foreground: 220 15% 25%;
+    
+    /* Aqua primary colors */
+    --primary: 195 100% 39%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 195 100% 50%;
+    
+    /* Water depth variations */
+    --secondary: 200 25% 90%;
+    --secondary-foreground: 220 15% 25%;
+    
+    /* Ocean depths */
+    --accent: 210 100% 92%;
+    --accent-foreground: 220 15% 25%;
+    
+    /* Muted water tones */
+    --muted: 200 20% 95%;
+    --muted-foreground: 220 10% 46%;
+    
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 25%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 25%;
+    
+    /* Alert colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 15% 25%;
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    
+    /* UI elements */
+    --border: 200 20% 88%;
+    --input: 200 20% 88%;
+    --ring: 195 100% 39%;
+    --radius: 0.75rem;
+    
+    /* Sidebar colors */
+    --sidebar-background: 210 100% 97%;
+    --sidebar-foreground: 220 15% 25%;
+    --sidebar-primary: 195 100% 39%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 200 25% 90%;
+    --sidebar-accent-foreground: 220 15% 25%;
+    --sidebar-border: 200 20% 88%;
+    --sidebar-ring: 195 100% 39%;
+  }
+  
+  .dark {
+    /* Dark mode water themes */
+    --background: 220 15% 8%;
+    --foreground: 210 40% 98%;
+    --primary: 195 100% 50%;
+    --primary-foreground: 220 15% 8%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 220 15% 20%;
+    --accent-foreground: 210 40% 98%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 60%;
+    --card: 220 15% 10%;
+    --card-foreground: 210 40% 98%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 210 40% 98%;
+    --border: 220 15% 15%;
+    --input: 220 15% 15%;
+    --ring: 195 100% 50%;
+    --sidebar-background: 220 15% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 195 100% 50%;
+    --sidebar-primary-foreground: 220 15% 8%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 220 15% 15%;
+    --sidebar-ring: 195 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* AquaMind component utilities */
+  .aqua-gradient {
+    background: linear-gradient(135deg, hsl(195 100% 39%), hsl(220 100% 50%));
+  }
+  
+  .ocean-gradient {
+    background: linear-gradient(180deg, hsl(195 100% 85%), hsl(220 100% 75%));
+  }
+  
+  .depth-gradient {
+    background: linear-gradient(45deg, hsl(210 100% 92%), hsl(195 100% 85%));
+  }
+  
+  .aqua-shadow {
+    box-shadow: 0 10px 30px -10px hsl(195 100% 39% / 0.3);
+  }
+  
+  .glow-shadow {
+    box-shadow: 0 0 40px hsl(195 100% 50% / 0.4);
+  }
+  
+  .depth-shadow {
+    box-shadow: 0 25px 50px -12px hsl(220 100% 50% / 0.25);
+  }
+  
+  .animate-wave {
+    animation: wave 3s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  .animate-ripple {
+    animation: ripple 2s ease-out infinite;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out forwards;
+  }
+}
+
+@layer utilities {
+  .transition-aqua {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .transition-bounce {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+/* Keyframe animations */
+@keyframes wave {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes scale-in {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slide-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/50 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
+}

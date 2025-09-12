@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <g fill="none" stroke="#0A8FBE" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Large outline drop on the right -->
+    <path d="M170 26c26 44 58 76 58 116c0 42-34 76-76 76s-76-34-76-76c0-40 32-72 58-116"/>
+    <!-- Small outline drop on the left -->
+    <path d="M88 62c16 26 32 44 32 66c0 24-20 44-44 44s-44-20-44-44c0-22 16-40 32-66"/>
+  </g>
+</svg>
+
