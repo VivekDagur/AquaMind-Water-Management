@@ -22,29 +22,33 @@ app.get("/", (req, res) => {
   res.send("Server is working! 🚀");
 });
 
-// ✅ Function to start server after DB connection
+// ✅ Mount routes first (before DB connection)
+app.use("/api", chatRoutes);
+app.use("/api", tankRoutes);
+app.use("/api", aiRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Something went wrong!" });
+});
+
+// ✅ Function to start server
 async function startServer() {
   try {
-    await connectDB(); // connect to MongoDB first
-    console.log("✅ MongoDB connected, starting server...");
-
-    // ✅ Routes (after DB connection) mounted at unified /api
-    app.use("/api", chatRoutes);
-    app.use("/api", tankRoutes);
-    app.use("/api", aiRoutes);
-
-        app.use((err, req, res, next) => {
-      console.error(err.stack);
-      res.status(500).json({ error: "Something went wrong!" });
+    // Connect to DB in background (don't block server start)
+    connectDB().then(() => {
+      console.log("✅ MongoDB connected");
+    }).catch((err) => {
+      console.log("⚠️ MongoDB connection failed, using fallback:", err.message);
     });
 
-    // ✅ Start server
+    // ✅ Start server immediately
     app.listen(PORT, () => {
       console.log(`🟢 Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error("❌ Failed to start server due to DB error:", err);
-    process.exit(1); // exit process if DB connection fails
+    console.error("❌ Failed to start server:", err);
+    process.exit(1);
   }
 }
 
