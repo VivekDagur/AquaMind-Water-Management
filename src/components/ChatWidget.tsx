@@ -149,6 +149,73 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     } catch { /* no-op */ }
   };
 
+  // Built-in responses for common queries
+  const getBuiltInResponse = (query: string): string | null => {
+    const q = query.toLowerCase().trim();
+    
+    // Greetings
+    if (q.match(/^(hi|hello|hey|good morning|good afternoon|good evening)$/)) {
+      return "Hello! I'm your AquaMind AI assistant. I can help you with water management, tank monitoring, and system insights. What would you like to know?";
+    }
+    
+    // Basic questions about AquaMind
+    if (q.includes("what is aquamind") || q.includes("what does aquamind do")) {
+      return "AquaMind is a smart water management system that provides real-time tank monitoring, AI-powered insights, and predictive analytics. It helps reduce water waste by up to 30% and prevents costly emergencies through intelligent alerts.";
+    }
+    
+    if (q.includes("how does it work") || q.includes("how it works")) {
+      return "AquaMind works by connecting to your water tanks through IoT sensors, monitoring levels in real-time, analyzing usage patterns, and providing intelligent recommendations. The system sends alerts for low levels, predicts maintenance needs, and helps optimize water consumption.";
+    }
+    
+    if (q.includes("features") || q.includes("what can you do")) {
+      return "Key AquaMind features include:\n• Real-time tank monitoring\n• Smart alerts and notifications\n• AI-powered usage optimization\n• Predictive maintenance insights\n• Historical data analysis\n• Mobile-responsive dashboard\n• Cost savings tracking";
+    }
+    
+    if (q.includes("benefits") || q.includes("why use")) {
+      return "AquaMind benefits:\n• Reduce water waste by 30%\n• Prevent costly overflow incidents\n• Lower operational costs\n• Ensure regulatory compliance\n• Optimize maintenance schedules\n• Real-time monitoring from anywhere\n• Improve sustainability metrics";
+    }
+    
+    // Tank-related queries
+    if (q.includes("tank") && (q.includes("level") || q.includes("status"))) {
+      if (selectedTank) {
+        const capacity = selectedTank.capacity_liters;
+        const current = selectedTank.current_liters;
+        return `Tank "${selectedTank.name}" status:\n• Capacity: ${capacity}L\n• Current Level: ${current}L\n• Status: ${selectedTank.status || "Active"}\n• Location: ${selectedTank.location || "Not specified"}`;
+      }
+      return "I can provide tank information when you select a specific tank from the dashboard. The system monitors water levels, capacity, and status in real-time.";
+    }
+    
+    // KPI queries
+    if (q.includes("kpi") || q.includes("statistics") || q.includes("usage")) {
+      if (kpis) {
+        return `Current System KPIs:\n• Total Water Stored: ${kpis.totalWaterStored}L\n• Total Capacity: ${kpis.totalCapacity}L\n• Utilization: ${kpis.utilizationPercentage}%\n• Community Tanks: ${kpis.communityTanks}\n• Avg Daily Consumption: ${kpis.avgDailyConsumption}L`;
+      }
+      return "KPIs show your water system performance including total capacity, current usage, efficiency metrics, and consumption patterns. Access the dashboard to view detailed analytics.";
+    }
+    
+    // Help and support
+    if (q.includes("help") || q === "?") {
+      return "I can help you with:\n• Understanding AquaMind features\n• Tank monitoring and status\n• Usage analytics and KPIs\n• Water optimization tips\n• System troubleshooting\n• General water management advice\n\nJust ask me anything about water management!";
+    }
+    
+    // Pricing and business
+    if (q.includes("price") || q.includes("cost") || q.includes("pricing")) {
+      return "AquaMind offers flexible pricing:\n• Basic Plan: $29/month (up to 5 tanks)\n• Professional: $99/month (up to 25 tanks, AI insights)\n• Enterprise: $299/month (unlimited tanks, custom integrations)\n\nAll plans include real-time monitoring, alerts, and mobile access.";
+    }
+    
+    // Technical questions
+    if (q.includes("how to") && q.includes("install")) {
+      return "AquaMind installation is simple:\n1. Connect IoT sensors to your tanks\n2. Configure sensor settings in dashboard\n3. Set alert thresholds\n4. Start monitoring!\n\nOur team provides full setup support and training.";
+    }
+    
+    // Goodbye
+    if (q.match(/^(bye|goodbye|thanks|thank you)$/)) {
+      return "You're welcome! Feel free to ask me anything about AquaMind or water management anytime. Have a great day! 💧";
+    }
+    
+    return null;
+  };
+
   const sendMessage = async () => {
     let q = input.trim();
     if (!q) return;
@@ -159,6 +226,14 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
 
     setMessages((prev) => [...prev, { role: "user", text: q }]);
     setInput("");
+
+    // Check for built-in responses first
+    const builtInResponse = getBuiltInResponse(q);
+    if (builtInResponse) {
+      setMessages((prev) => [...prev, { role: "assistant", text: builtInResponse }]);
+      if (shouldSpeakOnce || ttsEnabled) speak(builtInResponse);
+      return;
+    }
 
     const context = { projectSummary, selectedTank, kpis, pageContent: getPageContent() };
 
@@ -180,7 +255,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
         return;
       }
 
-      // Fallback to SSE streaming if non-streaming didn’t return expected shape
+      // Fallback to SSE streaming if non-streaming didn't return expected shape
       const streamUrl = `${base}/ai/chat/stream?` + new URLSearchParams({
         query: q,
         ...(conversationId ? { conversationId } : {}),
@@ -224,7 +299,10 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       }
     } catch (err) {
       console.error("ChatWidget error:", err);
-      setMessages((prev) => [...prev, { role: "assistant", text: "Sorry — couldn't reach AI backend." }]);
+      // Provide helpful fallback response instead of generic error
+      const fallbackResponse = "I'm currently running in offline mode, but I can still help you with basic AquaMind questions! Try asking about features, benefits, pricing, or tank monitoring. For advanced AI insights, the backend connection will be restored soon.";
+      setMessages((prev) => [...prev, { role: "assistant", text: fallbackResponse }]);
+      if (shouldSpeakOnce || ttsEnabled) speak(fallbackResponse);
     }
   };
 
