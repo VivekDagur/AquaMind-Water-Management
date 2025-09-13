@@ -26,6 +26,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   completeSetup: (setupData: User['tankSetup']) => void;
@@ -125,6 +126,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     login,
     logout,
     isLoading,
+    isAuthenticated: !!user,
     completeSetup,
     setDemoMode
   };

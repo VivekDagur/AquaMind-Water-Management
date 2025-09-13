@@ -121,7 +121,11 @@ const Index: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/login">
-                <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-white border-white hover:bg-white/10 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
+                >
                   View Demo
                 </Button>
               </Link>

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Droplets, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Droplets, Eye, EyeOff, Loader2, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
@@ -16,7 +16,7 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, setDemoMode } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -29,37 +29,17 @@ const Login: React.FC = () => {
     }
   }, [isAuthenticated, navigate, location]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
-    }
-
+  const handleDemoMode = async () => {
     setIsLoading(true);
-
     try {
-      // Simulate login process (700-1000ms delay as requested)
-      await login(email, password);
-      
+      setDemoMode();
       toast({
-        title: 'Welcome to AquaMind! 🌊',
-        description: 'Successfully logged in to your water management dashboard.',
+        title: 'Demo Mode Activated! 🚀',
+        description: 'Welcome to AquaMind demo with sample data.',
       });
-
-      // Navigate to intended destination or dashboard
-      const from = location.state?.from?.pathname || '/dashboard';
-      navigate(from, { replace: true });
-      
+      navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Please check your credentials and try again.',
-      });
+      setError('Failed to start demo mode');
     } finally {
       setIsLoading(false);
     }
@@ -162,6 +142,26 @@ const Login: React.FC = () => {
                 <>
                   <Droplets className="mr-2 h-4 w-4" />
                   Sign In
+                </>
+              )}
+            </Button>
+
+            <Button 
+              type="button"
+              onClick={handleDemoMode}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 hover:scale-[1.02] hover-lift" 
+              disabled={isLoading}
+              size="lg"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Starting Demo...
+                </>
+              ) : (
+                <>
+                  <Zap className="mr-2 h-4 w-4" />
+                  Try Demo Mode
                 </>
               )}
             </Button>
