@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,24 @@ import AnimatedBackground from '@/components/AnimatedBackground';
  * Showcases features and guides users to login/signup
  */
 const Index: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleViewDemo = () => {
+    // Set up demo authentication
+    const demoUser = {
+      id: 'demo-user',
+      name: 'Demo User',
+      email: 'demo@aquamind.com',
+      role: 'user'
+    };
+    
+    localStorage.setItem('authToken', 'demo-token');
+    localStorage.setItem('user', JSON.stringify(demoUser));
+    
+    // Navigate to dashboard
+    navigate('/dashboard');
+  };
+
   const features = [
     {
       icon: BarChart3,
@@ -123,15 +141,14 @@ const Index: React.FC = () => {
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/demo">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="text-white border-white bg-white/10 hover:bg-white/20 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
-                >
-                  View Demo
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={handleViewDemo}
+                className="text-white border-white bg-white/10 hover:bg-white/20 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
+              >
+                View Demo
+              </Button>
             </div>
           </div>
         </div>

@@ -9,32 +9,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     const checkAuth = () => {
-      if (authToken) {
-        try {
-          // Check if there's a stored user in localStorage
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            const user = JSON.parse(storedUser);
+      try {
+        // Check if there's a stored user in localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          // If it's a demo user, ensure demo mode is enabled
+          if (user?.demoMode) {
+            setUser(user);
+            setAuthToken('demo-token');
+          } else if (authToken) {
             setUser(user);
           } else {
-            // Fallback to mock user
-            const mockUser: User = {
-              id: '1',
-              email: 'user@aquamind.com',
-              name: 'AquaMind User',
-              role: 'user',
-              setupCompleted: false
-            };
-            setUser(mockUser);
+            // No valid auth token and not in demo mode
+            setUser(null);
           }
-        } catch (error) {
-          console.error('Auth initialization error:', error);
-          setAuthToken(null);
-          localStorage.removeItem('user');
+        } else if (authToken) {
+          // Fallback to mock user if we have an auth token but no user
+          const mockUser: User = {
+            id: '1',
+            email: 'user@aquamind.com',
+            name: 'AquaMind User',
+            role: 'user',
+            setupCompleted: false
+          };
+          setUser(mockUser);
+          localStorage.setItem('user', JSON.stringify(mockUser));
+        } else {
+          setUser(null);
         }
-        setIsLoading(false);
-      } else {
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setAuthToken('');
+        localStorage.removeItem('user');
         setUser(null);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -102,13 +111,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           wantsDemoMode: true
         }
       };
-      setUser(demoUser);
-      setAuthToken('demo-token');
+      // Save to both state and localStorage
       localStorage.setItem('user', JSON.stringify(demoUser));
+      setAuthToken('demo-token');
+      setUser(demoUser);
+      return demoUser;
     } else {
-      setUser(null);
-      setAuthToken('');
       localStorage.removeItem('user');
+      setAuthToken('');
+      setUser(null);
     }
   };
 
