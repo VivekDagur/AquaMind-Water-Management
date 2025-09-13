@@ -1,22 +1,26 @@
-# Welcome to your Lovable project
+# AquaMind Water Management System
 
-## Project info
+## Project Overview
 
-**URL**: https://lovable.dev/projects/a2458bd4-1501-421d-9bd9-5ab1f490ff93
+**Live Demo**: https://cheery-druid-3ad0d6.netlify.app
+**Backend API**: https://aquamind-water-management-production.up.railway.app
 
-## How can I edit this code?
+AquaMind is a comprehensive smart water management platform that provides real-time monitoring, AI-powered insights, and intelligent alerts for water systems. The system helps optimize water usage, prevent wastage, and ensure efficient resource management.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Real-time Tank Monitoring** - Live water level tracking with IoT sensors
+- **AI-Powered Insights** - Machine learning predictions and optimization recommendations  
+- **Smart Alerts** - Automated notifications for low levels, maintenance, and anomalies
+- **Analytics Dashboard** - Comprehensive data visualization and reporting
+- **User Onboarding** - Guided setup wizard for new users
+- **Demo Mode** - Interactive demonstration for showcasing capabilities
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a2458bd4-1501-421d-9bd9-5ab1f490ff93) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+## Development Setup
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Clone this repository and install dependencies. Requires Node.js & npm - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -60,14 +64,29 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/a2458bd4-1501-421d-9bd9-5ab1f490ff93) and click on Share -> Publish.
+The application is deployed using:
+- **Frontend**: Netlify (auto-deploys from main branch)
+- **Backend**: Railway (auto-deploys from main branch)
+- **Database**: MongoDB Atlas (cloud database)
 
-## Can I connect a custom domain to my Lovable project?
+## Custom Domain Setup
 
-Yes, you can!
+To use a custom domain like AquaMind.com:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. **Purchase domain** from a registrar (GoDaddy, Namecheap, etc.)
+2. **Configure DNS** in your domain registrar:
+   - Add CNAME record: `www` → `cheery-druid-3ad0d6.netlify.app`
+   - Add A record: `@` → `75.2.60.5` (Netlify's load balancer)
+3. **Add domain in Netlify**:
+   - Go to Site settings → Domain management
+   - Add custom domain: `aquamind.com`
+   - Enable HTTPS certificate
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Architecture
+
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
+- **Backend**: Node.js + Express + MongoDB
+- **AI**: OpenAI GPT-4o-mini integration
+- **Analytics**: Google Analytics 4 + custom tracking
