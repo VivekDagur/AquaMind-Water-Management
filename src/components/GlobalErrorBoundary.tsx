@@ -14,7 +14,6 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    // eslint-disable-next-line no-console
     console.error("Global error boundary caught: ", error, info);
   }
 
@@ -41,6 +40,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
     return this.props.children as React.ReactElement;
   }
 }
+
 
 
 

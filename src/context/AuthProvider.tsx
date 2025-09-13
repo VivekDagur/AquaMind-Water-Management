@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Simulate initial auth check delay
     setTimeout(checkAuth, 100);
-  }, [authToken]);
+  }, [authToken, setAuthToken]);
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);

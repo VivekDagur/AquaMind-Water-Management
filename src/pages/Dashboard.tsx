@@ -79,7 +79,9 @@ const Dashboard: React.FC = () => {
         try {
           const k = kpiRes.data || null;
           setApiKpis(k);
-        } catch {}
+        } catch (kpiErr) {
+          console.error("Failed to load KPIs", kpiErr);
+        }
       } catch (err) {
         console.error("Failed to load tanks/kpis", err);
         // Fallback entirely to mock if API fails
@@ -183,7 +185,7 @@ const Dashboard: React.FC = () => {
       sensorInstance.stop();
       setIsSimulationRunning(false);
     };
-  }, [selectedTank?.tank_id, toast, tanks]);
+  }, [selectedTank, toast, tanks]);
 
   const criticalCount = kpis.criticalTankCount;
   const lowCount = kpis.lowTankCount;
