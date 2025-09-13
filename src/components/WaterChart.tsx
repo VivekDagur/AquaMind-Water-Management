@@ -13,12 +13,15 @@ interface WaterChartProps {
 // Custom tooltip component for water data
 const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
-    const data = payload[0]?.payload as { percentage: number; liters: number } | undefined;
+    const data = payload[0]?.payload as { percentage: number; liters: number; fullTime?: string } | undefined;
     if (data) {
+      // Use the fullTime if available, otherwise use the label (formatted time)
+      const displayTime = data.fullTime ? new Date(data.fullTime).toLocaleString() : label;
+      
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="text-sm text-muted-foreground mb-1">
-            {new Date(label).toLocaleString()}
+            {displayTime}
           </p>
           <div className="space-y-1">
             <p className="text-sm font-medium text-primary">
