@@ -62,27 +62,47 @@ const Signup: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call delay (700-1000ms as requested)
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      toast({
-        title: 'Account Created! 🎉',
-        description: 'Welcome to AquaMind! Please log in with your new account.',
+      // Call backend API for user registration
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        }),
       });
 
-      // Redirect to login page as requested (no real backend)
-      navigate('/login', { 
-        state: { 
-          message: 'Account created successfully! Please log in.',
-          email: formData.email 
-        } 
-      });
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: 'Account Created! 🎉',
+          description: 'Welcome to AquaMind! You can now sign in.',
+        });
+
+        // Navigate to login page with success message
+        navigate('/login', { 
+          state: { 
+            message: 'Account created successfully! Please log in.',
+            email: formData.email 
+          } 
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Signup Failed',
+          description: data.message || 'Something went wrong. Please try again.',
+        });
+      }
       
     } catch (err) {
       toast({
         variant: 'destructive',
         title: 'Signup Failed',
-        description: 'Something went wrong. Please try again.',
+        description: 'Network error. Please try again.',
       });
     } finally {
       setIsLoading(false);
@@ -137,7 +157,7 @@ const Signup: React.FC = () => {
               Join AquaMind
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Create your account to start monitoring water tanks
+              Create your account to start smart water management
             </CardDescription>
           </div>
         </CardHeader>

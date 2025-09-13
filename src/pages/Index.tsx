@@ -105,7 +105,7 @@ const Index: React.FC = () => {
               <Button variant="ghost">Login</Button>
             </Link>
             <Link to="/signup">
-              <Button className="aqua-gradient text-white">Get Started</Button>
+              <Button className="aqua-gradient text-white">Sign Up</Button>
             </Link>
           </div>
         </div>
@@ -141,14 +141,15 @@ const Index: React.FC = () => {
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                onClick={handleViewDemo}
-                className="text-white border-white bg-white/10 hover:bg-white/20 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
-              >
-                View Demo
-              </Button>
+              <Link to="/demo">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-white border-white bg-white/10 hover:bg-white/20 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
+                >
+                  View Demo
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -302,7 +303,7 @@ const Index: React.FC = () => {
               <div className="mt-8">
                 <Link to="/signup">
                   <Button size="lg" className="aqua-gradient text-white">
-                    Get Started Today
+                    Sign Up Today
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
