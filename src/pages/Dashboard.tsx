@@ -46,50 +46,93 @@ const Dashboard: React.FC = () => {
 
   // Chart data (existing generator you already have)
   const chartData = selectedTank ? generateHistoricalData(selectedTank, 24) : [];
-  // 🔹 Load tanks and KPIs from backend
+  // 🔹 Load tanks and KPIs from backend with real-time updates
   useEffect(() => {
     const load = async () => {
       try {
+        const token = localStorage.getItem('authToken');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        
         const [tanksRes, kpiRes] = await Promise.all([
-          apiClient.get("/tanks"),
-          apiClient.get("/kpis"),
+          fetch(`${import.meta.env.VITE_API_URL || 'https://aquamind-backend.herokuapp.com/api'}/tanks`, { headers }),
+          fetch(`${import.meta.env.VITE_API_URL || 'https://aquamind-backend.herokuapp.com/api'}/kpis`, { headers })
         ]);
 
-        // Map backend Tank model to frontend Tank shape if needed
-        type BackendTank = { _id?: string; name?: string; capacity?: number; currentLevel?: number; location?: string };
-        const backendTanks: BackendTank[] = (tanksRes.data as BackendTank[]) || [];
-        let mapped: Tank[] = backendTanks.map((t, i) => ({
-          tank_id: t._id ?? String(i),
-          name: t.name ?? `Tank ${i + 1}`,
-          capacity_liters: t.capacity ?? 0,
-          current_liters: t.currentLevel ?? 0,
-          location: t.location ?? "",
-          status: (t.currentLevel ?? 0) < (t.capacity ?? 0) * 0.1 ? "critical" : (t.currentLevel ?? 0) < (t.capacity ?? 0) * 0.3 ? "low" : "healthy",
-          avg_consumption_lph: 50,
-          last_refill_iso: new Date().toISOString(),
-          is_community: false,
-          owner: "",
-        }));
-        if (!mapped.length) {
-          mapped = mockTanks;
+        if (tanksRes.ok) {
+          const backendTanks = await tanksRes.json();
+          let mapped: Tank[] = backendTanks.map((t: { _id?: string; name?: string; capacity?: number; currentLevel?: number; location?: string; tankType?: string }, i: number) => ({
+            tank_id: t._id ?? String(i),
+            name: t.name ?? `Tank ${i + 1}`,
+            capacity_liters: t.capacity ?? 5000,
+            current_liters: t.currentLevel ?? 3500,
+            location: t.location ?? "Unknown Location",
+            status: (t.currentLevel ?? 0) < (t.capacity ?? 0) * 0.1 ? "critical" : (t.currentLevel ?? 0) < (t.capacity ?? 0) * 0.3 ? "low" : "healthy",
+            avg_consumption_lph: 50 + Math.random() * 30,
+            last_refill_iso: new Date().toISOString(),
+            is_community: t.tankType === 'community',
+            owner: user?.name || "User",
+          }));
+          
+          if (!mapped.length) {
+            // Create tanks from user setup if no backend data
+            const userSetup = user?.tankSetup;
+            if (userSetup && userSetup.hasPhysicalTank) {
+              mapped = Array.from({ length: parseInt(userSetup.tankCount.toString()) || 1 }, (_, i) => ({
+                tank_id: `user-tank-${i}`,
+                name: `Tank ${i + 1}`,
+                capacity_liters: parseInt(userSetup.capacity) || 5000,
+                current_liters: parseInt(userSetup.currentLevel) || 3500,
+                location: userSetup.location || "User Location",
+                status: "healthy" as const,
+                avg_consumption_lph: 45 + Math.random() * 20,
+                last_refill_iso: new Date().toISOString(),
+                is_community: userSetup.tankType === 'community',
+                owner: user?.name || "User",
+              }));
+            } else {
+              mapped = mockTanks;
+            }
+          }
+          
+          setTanks(mapped);
+          setSelectedTank((prev) => prev ?? mapped[0] ?? null);
         }
-        setTanks(mapped);
-        setSelectedTank((prev) => prev ?? mapped[0] ?? null);
-        try {
-          const k = kpiRes.data || null;
-          setApiKpis(k);
-        } catch (kpiErr) {
-          console.error("Failed to load KPIs", kpiErr);
+        
+        if (kpiRes.ok) {
+          const kpiData = await kpiRes.json();
+          setApiKpis(kpiData);
         }
       } catch (err) {
         console.error("Failed to load tanks/kpis", err);
-        // Fallback entirely to mock if API fails
-        setTanks(mockTanks);
-        setSelectedTank((prev) => prev ?? mockTanks[0]);
+        // Enhanced fallback with user data
+        const userSetup = user?.tankSetup;
+        let fallbackTanks = mockTanks;
+        
+        if (userSetup && userSetup.hasPhysicalTank) {
+          fallbackTanks = Array.from({ length: parseInt(userSetup.tankCount.toString()) || 1 }, (_, i) => ({
+            tank_id: `fallback-tank-${i}`,
+            name: `Tank ${i + 1}`,
+            capacity_liters: parseInt(userSetup.capacity) || 5000,
+            current_liters: parseInt(userSetup.currentLevel) || 3500,
+            location: userSetup.location || "User Location",
+            status: "healthy" as const,
+            avg_consumption_lph: 45 + Math.random() * 20,
+            last_refill_iso: new Date().toISOString(),
+            is_community: userSetup.tankType === 'community',
+            owner: user?.name || "User",
+          }));
+        }
+        
+        setTanks(fallbackTanks);
+        setSelectedTank((prev) => prev ?? fallbackTanks[0]);
       }
     };
     load();
-  }, []);
+    
+    // Set up real-time updates every 30 seconds
+    const interval = setInterval(load, 30000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   // 🔹 Realtime monthly usage simulation (12 months rolling)
   const monthLabels = useMemo(() => {

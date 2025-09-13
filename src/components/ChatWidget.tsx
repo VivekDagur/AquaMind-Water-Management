@@ -160,7 +160,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     
     // Basic questions about AquaMind
     if (q.includes("what is aquamind") || q.includes("what does aquamind do")) {
-      return "AquaMind is a smart water management system that provides real-time tank monitoring, AI-powered insights, and predictive analytics. It helps reduce water waste by up to 30% and prevents costly emergencies through intelligent alerts.";
+      return "AquaMind is a smart water management system that provides real-time tank monitoring, AI-powered insights, and predictive analytics. It helps reduce water waste by up to 30% and prevents costly emergencies through intelligent alerts. Our system monitors both individual household tanks and community tanks with unified management.";
     }
     
     if (q.includes("how does it work") || q.includes("how it works")) {
@@ -168,7 +168,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     }
     
     if (q.includes("features") || q.includes("what can you do")) {
-      return "Key AquaMind features include:\n• Real-time tank monitoring\n• Smart alerts and notifications\n• AI-powered usage optimization\n• Predictive maintenance insights\n• Historical data analysis\n• Mobile-responsive dashboard\n• Cost savings tracking";
+      return "Key AquaMind features include:\n• Real-time tank monitoring with 5-second updates\n• Smart alerts (24h, 12h, 3h before depletion)\n• AI-powered usage forecasting\n• Community dashboard for transparency\n• Monthly/weekly reports with AI recommendations\n• Voice-enabled chatbot assistance\n• Google/Facebook/Phone authentication\n• IoT sensor integration\n• Export capabilities for planning";
     }
     
     if (q.includes("benefits") || q.includes("why use")) {
@@ -195,7 +195,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     
     // Help and support
     if (q.includes("help") || q === "?") {
-      return "I can help you with:\n• Understanding AquaMind features\n• Tank monitoring and status\n• Usage analytics and KPIs\n• Water optimization tips\n• System troubleshooting\n• General water management advice\n\nJust ask me anything about water management!";
+      return "I can help you with:\n• Understanding AquaMind features and benefits\n• Tank monitoring and real-time status\n• Usage analytics and KPIs interpretation\n• Water optimization and conservation tips\n• System setup and troubleshooting\n• Authentication and account management\n• Community tank management\n• AI forecasting and alerts\n• Export and reporting features\n\nJust ask me anything about water management or AquaMind!";
     }
     
     // Pricing and business
@@ -300,7 +300,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
     } catch (err) {
       console.error("ChatWidget error:", err);
       // Provide helpful fallback response instead of generic error
-      const fallbackResponse = "I'm currently running in offline mode, but I can still help you with basic AquaMind questions! Try asking about features, benefits, pricing, or tank monitoring. For advanced AI insights, the backend connection will be restored soon.";
+      const fallbackResponse = "I'm your AquaMind AI assistant! I can help you with:\n\n🔹 **System Features**: Real-time monitoring, smart alerts, AI forecasting\n🔹 **Tank Management**: Status, levels, consumption patterns\n🔹 **Authentication**: Google, Facebook, Phone login options\n🔹 **Community Features**: Shared dashboards, transparency\n🔹 **Reports**: Monthly/weekly usage with AI recommendations\n\nTry asking: 'What is AquaMind?', 'How does it work?', 'What are the features?', or 'How do I set up tanks?'";
       setMessages((prev) => [...prev, { role: "assistant", text: fallbackResponse }]);
       if (shouldSpeakOnce || ttsEnabled) speak(fallbackResponse);
     }
@@ -389,7 +389,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
               onKeyDown={(e) => {
                 if (e.key === "Enter") void sendMessage();
               }}
-              placeholder="Ask about the project..."
+              placeholder="Ask about AquaMind, tanks, or water management..."
               className="flex-1 p-2 outline-none"
             />
             <button

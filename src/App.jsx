@@ -18,6 +18,7 @@ import Alerts from "./pages/Alerts";
 import Admin from "./pages/Admin";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
+import TankSetup from "./pages/TankSetup";
 import ChatWidget from "@/components/ChatWidget";
 import DashboardWrapper from "@/components/DashboardWrapper";
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/setup" element={<TankSetup />} />
 
             {/* Protected routes */}
             <Route

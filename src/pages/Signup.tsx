@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Droplets, Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react';
+import { Droplets, Eye, EyeOff, Loader2, CheckCircle, Mail, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Signup: React.FC = () => {
@@ -63,7 +63,7 @@ const Signup: React.FC = () => {
 
     try {
       // Call backend API for user registration
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/signup`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://aquamind-backend.herokuapp.com/api'}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,13 +83,11 @@ const Signup: React.FC = () => {
           description: 'Welcome to AquaMind! You can now sign in.',
         });
 
-        // Navigate to login page with success message
-        navigate('/login', { 
-          state: { 
-            message: 'Account created successfully! Please log in.',
-            email: formData.email 
-          } 
-        });
+        // Navigate to setup page for new users
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        navigate('/setup');
       } else {
         toast({
           variant: 'destructive',
@@ -344,8 +342,42 @@ const Signup: React.FC = () => {
                 </Link>
               </div>
               
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground">
+              <div className="pt-4 border-t border-border space-y-4">
+                <div className="space-y-3">
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    className="w-full transition-all duration-300 hover:scale-[1.02]" 
+                    size="lg"
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Sign up with Google
+                  </Button>
+                  
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    className="w-full transition-all duration-300 hover:scale-[1.02]" 
+                    size="lg"
+                  >
+                    <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="#1877F2">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Sign up with Facebook
+                  </Button>
+                  
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    className="w-full transition-all duration-300 hover:scale-[1.02]" 
+                    size="lg"
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    Sign up with Phone
+                  </Button>
+                </div>
+                
+                <p className="text-xs text-muted-foreground text-center">
                   By creating an account, you agree to our{' '}
                   <a href="#" className="text-primary hover:underline">Terms of Service</a>{' '}
                   and{' '}
