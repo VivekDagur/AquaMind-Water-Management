@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Sidebar } from '@/components/Sidebar';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -13,7 +15,7 @@ interface ProtectedLayoutProps {
 export const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-  const user = { role: 'admin' }; // assuming user object is defined somewhere
+  const { user } = useAuth();
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const closeSidebar = () => setSidebarOpen(false);

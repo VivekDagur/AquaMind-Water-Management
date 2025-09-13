@@ -12,26 +12,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         // Check if there's a stored user in localStorage
         const storedUser = localStorage.getItem('user');
-        if (storedUser) {
+        const storedToken = localStorage.getItem('authToken');
+        
+        if (storedUser && storedToken) {
           const user = JSON.parse(storedUser);
-          // If it's a demo user, ensure demo mode is enabled
-          if (user?.demoMode) {
-            setUser(user);
-            setAuthToken('demo-token');
-          } else if (authToken) {
-            setUser(user);
-          } else {
-            // No valid auth token and not in demo mode
-            setUser(null);
-          }
+          setUser(user);
+          setAuthToken(storedToken);
         } else if (authToken) {
-          // Fallback to mock user if we have an auth token but no user
+          // If we have authToken but no user, create a mock user
           const mockUser: User = {
             id: '1',
             email: 'user@aquamind.com',
             name: 'AquaMind User',
             role: 'user',
-            setupCompleted: false
+            setupCompleted: true
           };
           setUser(mockUser);
           localStorage.setItem('user', JSON.stringify(mockUser));
@@ -78,7 +72,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = (): void => {
     setUser(null);
-    setAuthToken(''); // Clear auth from localStorage
+    setAuthToken('');
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
   };
 
   const completeSetup = (setupData: User['tankSetup']) => {
@@ -113,11 +109,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       };
       // Save to both state and localStorage
       localStorage.setItem('user', JSON.stringify(demoUser));
+      localStorage.setItem('authToken', 'demo-token');
       setAuthToken('demo-token');
       setUser(demoUser);
       return demoUser;
     } else {
       localStorage.removeItem('user');
+      localStorage.removeItem('authToken');
       setAuthToken('');
       setUser(null);
     }
