@@ -16,8 +16,8 @@ import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
-import Chat from "./pages/Chat";
 import ChatWidget from "@/components/ChatWidget";
+import DashboardWrapper from "@/components/DashboardWrapper";
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 
 
@@ -39,19 +39,10 @@ const App = () => (
 
             {/* Protected routes */}
             <Route
-             path="/chat"
-             element={
-              <ProtectedRoute>
-                <Chat />
-                </ProtectedRoute>
-               }
-              />
-
-            <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DashboardWrapper />
                 </ProtectedRoute>
               }
             />

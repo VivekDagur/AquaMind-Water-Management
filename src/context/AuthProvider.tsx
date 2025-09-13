@@ -1,31 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { AuthContext, User, AuthContextType } from './authContext';
+import React, { useState, useEffect, createContext, ReactNode } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'user' | 'admin';
+  setupCompleted?: boolean;
+  tankSetup?: {
+    hasPhysicalTank: boolean;
+    tankCount: number;
+    tankType: 'residential' | 'commercial' | 'industrial' | 'community';
+    location: string;
+    capacity: string;
+    currentLevel: string;
+    sensorConnected: boolean;
+    wantsDemoMode: boolean;
+  };
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  completeSetup: (setupData: User['tankSetup']) => void;
+  setDemoMode: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [authToken, setAuthToken] = useLocalStorage<string>('auth', '');
+  const [authToken, setAuthToken] = useLocalStorage('authToken', null);
 
-  // Check for existing auth on mount
   useEffect(() => {
     const checkAuth = () => {
-      // Auto-auth in dev to avoid blank protected pages
-      if (authToken !== '1') {
-        setAuthToken('1');
+      if (authToken) {
+        // Mock user data based on stored token
+        const mockUser: User = {
+          id: '1',
+          email: 'user@aquamind.com',
+          name: 'AquaMind User',
+          role: 'user',
+          setupCompleted: false
+        };
+        setUser(mockUser);
+        setIsLoading(false);
+      } else {
+        setUser(null);
+        setIsLoading(false);
       }
-      const mockUser: User = {
-        id: '1',
-        email: 'user@aquamind.com',
-        name: 'AquaMind User',
-        role: 'user'
-      };
-      setUser(mockUser);
-      setIsLoading(false);
     };
 
     // Simulate initial auth check delay
@@ -61,12 +91,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setAuthToken(''); // Clear auth from localStorage
   };
 
+  const completeSetup = (setupData: User['tankSetup']) => {
+    if (user) {
+      setUser({
+        ...user,
+        setupCompleted: true,
+        tankSetup: setupData
+      });
+    }
+  };
+
+  const setDemoMode = () => {
+    if (user) {
+      setUser({
+        ...user,
+        setupCompleted: true,
+        tankSetup: {
+          hasPhysicalTank: false,
+          tankCount: 3,
+          tankType: 'residential',
+          location: 'Demo Location',
+          capacity: '5000',
+          currentLevel: '3500',
+          sensorConnected: true,
+          wantsDemoMode: true
+        }
+      });
+    }
+  };
+
   const contextValue: AuthContextType = {
     user,
-    isAuthenticated: !!user && authToken === '1',
     login,
     logout,
-    isLoading
+    isLoading,
+    completeSetup,
+    setDemoMode
   };
 
   return (
