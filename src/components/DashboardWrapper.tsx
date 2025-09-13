@@ -4,6 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import Dashboard from '@/pages/Dashboard';
 import TankSetupWizard from '@/components/TankSetupWizard';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const DashboardWrapper: React.FC = () => {
   const { user, completeSetup, setDemoMode, isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
@@ -39,10 +41,56 @@ const DashboardWrapper: React.FC = () => {
     return <Dashboard />;
   }
 
+  // Handle tank setup completion
+  const handleSetupComplete = async (setupData: {
+    hasPhysicalTank: boolean;
+    tankCount: number;
+    tankType: 'residential' | 'commercial' | 'industrial' | 'community';
+    location: string;
+    capacity: string;
+    currentLevel: string;
+    sensorConnected: boolean;
+    wantsDemoMode: boolean;
+  }) => {
+    try {
+      // Create tanks in backend if not in demo mode
+      if (!user?.demoMode) {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          // Create tanks based on setup data
+          for (let i = 0; i < setupData.tankCount; i++) {
+            const tankName = setupData.tankCount === 1 ? 'Main Tank' : `Tank ${i + 1}`;
+            await fetch(`${API_URL}/tanks`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                name: tankName,
+                capacity: parseFloat(setupData.capacity) || 5000,
+                currentLevel: parseFloat(setupData.currentLevel) || 0,
+                location: setupData.location || 'Not specified',
+                tankType: setupData.tankType
+              })
+            });
+          }
+        }
+      }
+      
+      // Complete setup in auth context
+      await completeSetup(setupData);
+    } catch (error) {
+      console.error('Error completing setup:', error);
+      // Still complete setup even if tank creation fails
+      await completeSetup(setupData);
+    }
+  };
+
   // Show setup wizard for new users
   return (
     <TankSetupWizard
-      onComplete={completeSetup}
+      onComplete={handleSetupComplete}
       onSkipToDemo={() => setDemoMode(true)}
     />
   );

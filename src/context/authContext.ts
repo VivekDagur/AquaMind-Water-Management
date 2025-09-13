@@ -29,6 +29,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   setDemoMode: (enable?: boolean) => void;
   setUser: (user: User | null) => void;
+  completeSetup: (setupData: User['tankSetup']) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

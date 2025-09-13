@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { AuthContext, AuthContextType, User } from './authContext';
+import { AuthContext, AuthContextType, User } from './AuthContext';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -8,27 +10,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [authToken, setAuthToken] = useLocalStorage('authToken', null);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        // Check if there's a stored user in localStorage
-        const storedUser = localStorage.getItem('user');
         const storedToken = localStorage.getItem('authToken');
         
-        if (storedUser && storedToken) {
-          const user = JSON.parse(storedUser);
-          setUser(user);
-          setAuthToken(storedToken);
-        } else if (authToken) {
-          // If we have authToken but no user, create a mock user
-          const mockUser: User = {
-            id: '1',
-            email: 'user@aquamind.com',
-            name: 'AquaMind User',
-            role: 'user',
-            setupCompleted: true
-          };
-          setUser(mockUser);
-          localStorage.setItem('user', JSON.stringify(mockUser));
+        if (storedToken && storedToken !== 'demo-token') {
+          // Verify token with backend
+          try {
+            const response = await fetch(`${API_URL}/auth/profile`, {
+              headers: {
+                'Authorization': `Bearer ${storedToken}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              setUser(data.user);
+              setAuthToken(storedToken);
+            } else {
+              // Token invalid, clear auth
+              localStorage.removeItem('authToken');
+              localStorage.removeItem('user');
+              setAuthToken('');
+              setUser(null);
+            }
+          } catch (error) {
+            console.error('Token verification failed:', error);
+            // Fallback to demo mode on network error
+            setDemoMode(true);
+          }
+        } else if (storedToken === 'demo-token') {
+          // Handle demo mode
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            setUser(JSON.parse(storedUser));
+          }
         } else {
           setUser(null);
         }
@@ -42,32 +59,67 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     };
 
-    // Simulate initial auth check delay
-    setTimeout(checkAuth, 100);
+    checkAuth();
   }, [authToken, setAuthToken]);
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay (700-1000ms as requested)
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Mock authentication - accept any email/password
-    if (email && password) {
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-        role: email.includes('admin') ? 'admin' : 'user'
-      };
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
       
-      setUser(mockUser);
-      setAuthToken('1'); // Store auth state in localStorage
-    } else {
-      throw new Error('Invalid credentials');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setUser(data.user);
+        setAuthToken(data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('authToken', data.token);
+      } else {
+        throw new Error(data.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const signup = async (name: string, email: string, password: string): Promise<void> => {
+    setIsLoading(true);
     
-    setIsLoading(false);
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, password })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setUser(data.user);
+        setAuthToken(data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('authToken', data.token);
+      } else {
+        throw new Error(data.error || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = (): void => {
@@ -77,13 +129,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authToken');
   };
 
-  const completeSetup = (setupData: User['tankSetup']) => {
-    if (user) {
-      setUser({
+  const completeSetup = async (setupData: User['tankSetup']) => {
+    if (user && authToken && authToken !== 'demo-token') {
+      try {
+        const response = await fetch(`${API_URL}/auth/setup`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ setupData })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
+      } catch (error) {
+        console.error('Setup completion error:', error);
+      }
+    } else if (user) {
+      // Demo mode fallback
+      const updatedUser = {
         ...user,
         setupCompleted: true,
         tankSetup: setupData
-      });
+      };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
     }
   };
 
@@ -125,9 +199,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     <AuthContext.Provider
       value={{
         user,
+        currentUser: user,
         isAuthenticated: !!user,
         isLoading,
         login,
+        signup,
         logout,
         completeSetup,
         setDemoMode,

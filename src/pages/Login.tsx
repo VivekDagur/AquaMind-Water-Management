@@ -72,6 +72,7 @@ const Login: React.FC = () => {
       name: 'Demo User',
       role: 'user',
       setupCompleted: true,
+      demoMode: true,
       tankSetup: {
         hasPhysicalTank: false,
         tankCount: 3,

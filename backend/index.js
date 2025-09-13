@@ -9,6 +9,7 @@ import { connectDB } from "./db.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import tankRoutes from "./routes/tankRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Mount routes first (before DB connection)
+app.use("/api", authRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", tankRoutes);
 app.use("/api", aiRoutes);
