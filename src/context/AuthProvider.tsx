@@ -82,11 +82,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const setDemoMode = () => {
-    if (user) {
-      setUser({
-        ...user,
+  const setDemoMode = (enable: boolean = true) => {
+    if (enable) {
+      const demoUser: User = {
+        id: 'demo-user',
+        email: 'demo@aquamind.com',
+        name: 'Demo User',
+        role: 'user',
         setupCompleted: true,
+        demoMode: true,
         tankSetup: {
           hasPhysicalTank: false,
           tankCount: 3,
@@ -97,22 +101,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           sensorConnected: true,
           wantsDemoMode: true
         }
-      });
+      };
+      setUser(demoUser);
+      setAuthToken('demo-token');
+      localStorage.setItem('user', JSON.stringify(demoUser));
+    } else {
+      setUser(null);
+      setAuthToken('');
+      localStorage.removeItem('user');
     }
   };
 
-  const contextValue: AuthContextType = {
-    user,
-    login,
-    logout,
-    isLoading,
-    isAuthenticated: !!user,
-    completeSetup,
-    setDemoMode
-  };
-
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        isLoading,
+        login,
+        logout,
+        completeSetup,
+        setDemoMode,
+        setUser
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -6,6 +6,7 @@ export interface User {
   name: string;
   role: 'admin' | 'user' | 'community';
   setupCompleted?: boolean;
+  demoMode?: boolean;
   tankSetup?: {
     hasPhysicalTank: boolean;
     tankCount: number;
@@ -25,7 +26,8 @@ export interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   completeSetup: (setupData: User['tankSetup']) => void;
-  setDemoMode: () => void;
+  setDemoMode: (enable?: boolean) => void;
+  setUser: (user: User | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
