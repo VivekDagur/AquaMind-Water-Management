@@ -1,4 +1,6 @@
-# AquaMind Water Management System
+# AquaMind - Smart Water Management System 🚀
+
+**Latest Update**: Fixed network errors and implemented complete backend integration
 
 ## Project Overview
 
