@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Droplets, Eye, EyeOff, Loader2, CheckCircle, Mail, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import SubtleAnimatedBackground from '@/components/SubtleAnimatedBackground';
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -133,13 +134,8 @@ const Signup: React.FC = () => {
   }, [formData.password]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center ocean-gradient p-4">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-float"></div>
-        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-white/30 rounded-full animate-wave" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 right-1/3 w-1.5 h-1.5 bg-white/25 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
-      </div>
+    <SubtleAnimatedBackground intensity="medium">
+      <div className="min-h-screen flex items-center justify-center ocean-gradient p-4">
 
       <Card className="w-full max-w-md animate-scale-in aqua-shadow bg-white/95 backdrop-blur">
         <CardHeader className="text-center space-y-4">
@@ -389,6 +385,7 @@ const Signup: React.FC = () => {
         </CardContent>
       </Card>
     </div>
+    </SubtleAnimatedBackground>
   );
 };
 

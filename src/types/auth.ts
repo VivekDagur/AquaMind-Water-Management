@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { ReactNode } from 'react';
 
 export interface User {
   id: string;
@@ -21,24 +21,16 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  currentUser: User | null;
+  currentUser: User | null; // Alias for user
+  isAuthenticated: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  isLoading: boolean;
-  isAuthenticated: boolean;
   setDemoMode: (enable?: boolean) => void;
-  setUser: (user: User | null) => void;
+  setUser: (user: User | null) => void; // Add setUser function
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
-export default AuthContext;
+export interface AuthProviderProps {
+  children: ReactNode;
+}

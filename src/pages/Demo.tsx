@@ -152,33 +152,76 @@ const Demo: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="bg-card rounded-lg border p-6 max-w-4xl mx-auto">
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold mb-2">Ready to try AquaMind with your own data?</h2>
-                    <p className="text-muted-foreground mb-6">
-                      Sign up now to start monitoring your water usage in real-time
+                <div className="max-w-2xl mx-auto">
+                  <div className="text-center mb-8">
+                    <h1 className="text-5xl font-bold mb-4 aqua-gradient bg-clip-text text-transparent">
+                      Welcome to AquaMind!
+                    </h1>
+                    <p className="text-xl text-muted-foreground">
+                      Let's get you started with smart water management
                     </p>
-                    <Link to="/signup">
-                      <Button size="lg" className="aqua-gradient text-white">
-                        Sign Up Now
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
-                    {[
-                      'No credit card required',
-                      '14-day free trial',
-                      'Cancel anytime',
-                      '24/7 Support'
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center justify-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        <span>{item}</span>
+
+                  <Card className="p-8 bg-gradient-to-br from-background to-muted/20 border-2">
+                    <div className="space-y-6">
+                      <div className="text-center">
+                        <Droplets className="h-20 w-20 text-primary mx-auto mb-4 animate-wave" />
+                        <h2 className="text-3xl font-bold mb-2">Ready to Start?</h2>
+                        <p className="text-muted-foreground mb-6 text-lg">
+                          Click below to explore AquaMind with sample data and see how it can transform your water management.
+                        </p>
                       </div>
-                    ))}
-                  </div>
+
+                      <div className="grid gap-4">
+                        <div className="flex items-center gap-4 p-6 bg-blue-50 rounded-xl border border-blue-200 hover:shadow-md transition-shadow">
+                          <BarChart3 className="h-8 w-8 text-blue-500" />
+                          <div>
+                            <h3 className="font-bold text-lg">Real-time Monitoring</h3>
+                            <p className="text-muted-foreground">Track water levels across all your tanks</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 p-6 bg-green-50 rounded-xl border border-green-200 hover:shadow-md transition-shadow">
+                          <Zap className="h-8 w-8 text-green-500" />
+                          <div>
+                            <h3 className="font-bold text-lg">AI Predictions</h3>
+                            <p className="text-muted-foreground">Get smart forecasts and usage insights</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 p-6 bg-purple-50 rounded-xl border border-purple-200 hover:shadow-md transition-shadow">
+                          <Bell className="h-8 w-8 text-purple-500" />
+                          <div>
+                            <h3 className="font-bold text-lg">Smart Alerts</h3>
+                            <p className="text-muted-foreground">Never run out of water unexpectedly</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-center pt-6">
+                        <Link to="/signup">
+                          <Button size="lg" className="aqua-gradient text-white text-lg px-8 py-4 h-auto">
+                            Sign Up Now
+                            <ChevronRight className="ml-2 h-5 w-5" />
+                          </Button>
+                        </Link>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm pt-4">
+                        {[
+                          'No credit card required',
+                          '14-day free trial',
+                          'Cancel anytime',
+                          '24/7 Support'
+                        ].map((item, i) => (
+                          <div key={i} className="flex items-center justify-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span className="text-muted-foreground">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Card>
                 </div>
               </>
             ) : (

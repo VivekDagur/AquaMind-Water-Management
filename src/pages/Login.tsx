@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Droplets, Eye, EyeOff, Loader2, Mail, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import SubtleAnimatedBackground from '@/components/SubtleAnimatedBackground';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -96,7 +97,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ocean-gradient p-4">
+    <SubtleAnimatedBackground intensity="medium">
+      <div className="min-h-screen flex items-center justify-center ocean-gradient p-4">
       <Card className="w-full max-w-md animate-scale-in aqua-shadow bg-white/95 backdrop-blur">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
@@ -256,6 +258,7 @@ const Login: React.FC = () => {
         </CardContent>
       </Card>
     </div>
+    </SubtleAnimatedBackground>
   );
 };
 

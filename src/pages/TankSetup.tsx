@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Droplets, MapPin, Gauge, Users, Home, Building, Factory, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import SubtleAnimatedBackground from '@/components/SubtleAnimatedBackground';
 
 const TankSetup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -125,7 +125,7 @@ const TankSetup: React.FC = () => {
   };
 
   return (
-    <AnimatedBackground>
+    <SubtleAnimatedBackground intensity="medium">
       <div className="min-h-screen bg-background/80 backdrop-blur-sm py-12">
         <div className="container px-4 max-w-2xl mx-auto">
           <div className="text-center mb-8">
@@ -349,7 +349,7 @@ const TankSetup: React.FC = () => {
           </Card>
         </div>
       </div>
-    </AnimatedBackground>
+    </SubtleAnimatedBackground>
   );
 };
 
