@@ -115,8 +115,11 @@ const Index: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 animate-scale-in">
               <Link to="/signup">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 px-8">
-                  Start Free Trial
+                <Button 
+                  size="lg" 
+                  className="bg-white text-primary hover:bg-white/90 px-8 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
+                >
+                  Launch AquaMind
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -124,7 +127,7 @@ const Index: React.FC = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-white border-white hover:bg-white/10 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
+                  className="text-white border-white bg-white/10 hover:bg-white/20 hover-lift water-ripple transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
                 >
                   View Demo
                 </Button>

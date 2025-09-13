@@ -1,39 +1,6 @@
-import React, { useState, useEffect, createContext, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'user' | 'admin';
-  setupCompleted?: boolean;
-  tankSetup?: {
-    hasPhysicalTank: boolean;
-    tankCount: number;
-    tankType: 'residential' | 'commercial' | 'industrial' | 'community';
-    location: string;
-    capacity: string;
-    currentLevel: string;
-    sensorConnected: boolean;
-    wantsDemoMode: boolean;
-  };
-}
-
-interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-  completeSetup: (setupData: User['tankSetup']) => void;
-  setDemoMode: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext, AuthContextType, User } from './authContext';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
