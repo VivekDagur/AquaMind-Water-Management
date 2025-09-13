@@ -194,19 +194,23 @@
 
 @keyframes bubble-float {
   0% { transform: translateY(100vh) scale(0); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
   100% { transform: translateY(-100px) scale(1); opacity: 0; }
 }
 
 @keyframes gentle-sway {
-  0%, 100% { transform: translateX(0px); }
-  50% { transform: translateX(10px); }
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  25% { transform: translateX(15px) translateY(-5px); }
+  50% { transform: translateX(10px) translateY(5px); }
+  75% { transform: translateX(-5px) translateY(-3px); }
 }
 
 @keyframes water-flow {
-  0% { transform: translateX(-100%) rotate(0deg); }
-  100% { transform: translateX(100vw) rotate(360deg); }
+  0% { transform: translateX(-200px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { transform: translateX(calc(100vw + 200px)) rotate(180deg); opacity: 0; }
 }
 
 @keyframes subtle-pulse {
@@ -276,23 +280,26 @@
 .bubble {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.05));
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(147, 197, 253, 0.2));
   animation: bubble-float linear infinite;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
 
 .wave-element {
   position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.03), transparent);
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
   animation: water-flow linear infinite;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 .floating-droplet {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(59, 130, 246, 0.2);
+  width: 8px;
+  height: 8px;
+  background: rgba(59, 130, 246, 0.6);
   border-radius: 50%;
   animation: gentle-sway 4s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
 }
 
 /* Custom scrollbar */

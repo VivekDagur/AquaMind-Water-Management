@@ -125,33 +125,6 @@ const Demo: React.FC = () => {
           <div className="container px-4">
             {!showQuestions ? (
               <>
-                <div className="text-center mb-12">
-                  <h1 className="text-4xl font-bold mb-4">
-                    Experience AquaMind
-                  </h1>
-                  <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                    Explore the features of our smart water management system with sample data
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                  {features.map((feature, index) => (
-                    <Card key={index} className="h-full hover:shadow-lg transition-shadow">
-                      <CardHeader className="pb-2">
-                        <div className="flex items-center gap-3">
-                          <feature.icon className="h-6 w-6 text-primary" />
-                          <CardTitle className="text-lg">{feature.title}</CardTitle>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          {feature.description}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
                 <div className="max-w-2xl mx-auto">
                   <div className="text-center mb-8">
                     <h1 className="text-5xl font-bold mb-4 aqua-gradient bg-clip-text text-transparent">

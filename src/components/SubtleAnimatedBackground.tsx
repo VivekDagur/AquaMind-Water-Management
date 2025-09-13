@@ -34,9 +34,9 @@ const SubtleAnimatedBackground: React.FC<SubtleAnimatedBackgroundProps> = ({
 
   useEffect(() => {
     const intensityConfig = {
-      low: { bubbles: 3, waves: 2, droplets: 5 },
-      medium: { bubbles: 5, waves: 3, droplets: 8 },
-      high: { bubbles: 8, waves: 4, droplets: 12 }
+      low: { bubbles: 8, waves: 6, droplets: 15 },
+      medium: { bubbles: 15, waves: 10, droplets: 25 },
+      high: { bubbles: 25, waves: 15, droplets: 40 }
     };
 
     const config = intensityConfig[intensity];
@@ -44,19 +44,19 @@ const SubtleAnimatedBackground: React.FC<SubtleAnimatedBackgroundProps> = ({
     // Generate bubbles
     const newBubbles = Array.from({ length: config.bubbles }, (_, i) => ({
       id: i,
-      size: Math.random() * 60 + 20, // 20-80px
+      size: Math.random() * 80 + 30, // 30-110px
       left: Math.random() * 100, // 0-100%
-      duration: Math.random() * 10 + 15, // 15-25s
-      delay: Math.random() * 5, // 0-5s delay
+      duration: Math.random() * 8 + 10, // 10-18s
+      delay: Math.random() * 3, // 0-3s delay
     }));
 
     // Generate waves
     const newWaves = Array.from({ length: config.waves }, (_, i) => ({
       id: i,
-      height: Math.random() * 2 + 1, // 1-3px
+      height: Math.random() * 4 + 2, // 2-6px
       top: Math.random() * 100, // 0-100%
-      duration: Math.random() * 20 + 30, // 30-50s
-      delay: Math.random() * 10, // 0-10s delay
+      duration: Math.random() * 15 + 20, // 20-35s
+      delay: Math.random() * 8, // 0-8s delay
     }));
 
     // Generate floating droplets
@@ -64,7 +64,7 @@ const SubtleAnimatedBackground: React.FC<SubtleAnimatedBackgroundProps> = ({
       id: i,
       left: Math.random() * 100, // 0-100%
       top: Math.random() * 100, // 0-100%
-      delay: Math.random() * 4, // 0-4s delay
+      delay: Math.random() * 2, // 0-2s delay
     }));
 
     setBubbles(newBubbles);
