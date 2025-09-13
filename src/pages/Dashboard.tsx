@@ -2,22 +2,23 @@
 import ChatWidget from "@/components/ChatWidget";
 import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Droplets,
-  TrendingUp,
-  Users,
-  Clock,
-  RefreshCw,
-} from "lucide-react";
-import SmallBarChart, { SimplePoint } from "@/components/SmallBarChart";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Droplets, TrendingUp, AlertTriangle, CheckCircle, Zap, DollarSign, RefreshCw } from 'lucide-react';
+import SmallBarChart from "@/components/SmallBarChart";
 import { WaterChart } from "@/components/WaterChart";
 import { TankCard } from "@/components/TankCard";
 import { ProtectedLayout } from "@/components/ProtectedLayout";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from '@/hooks/useAuth';
 import { calculateKPIs, generateHistoricalData, type Tank, mockTanks } from "@/utils/mockData";
 import { apiClient } from "@/utils/api";
 import { getSensorInstance, startSensorSimulation } from "@/utils/sensors";
 import { useToast } from "@/hooks/use-toast";
+import HackathonDemoEnhancer from '@/components/HackathonDemoEnhancer';
+import { demoTanks, demoKPIs, demoAlerts, demoUsageData } from '@/components/EnhancedDemoData';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -28,7 +29,7 @@ const Dashboard: React.FC = () => {
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
 
   // 🔹 Monthly usage (client-side realtime generator, no backend)
-  const [monthlyUsage, setMonthlyUsage] = useState<SimplePoint[]>([]);
+  const [monthlyUsage, setMonthlyUsage] = useState<{label: string; value: number}[]>([]);
 
   // Calculate KPIs
   const [apiKpis, setApiKpis] = useState<{ totalWaterStored?: number; totalCapacity?: number; utilizationPercentage?: number; communityTanks?: number; nextRefillETA?: number } | null>(null);
@@ -107,7 +108,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     // initialize with a smooth baseline
     const base = 200 + Math.random() * 150;
-    const initial: SimplePoint[] = monthLabels.map((m, i) => ({
+    const initial: {label: string; value: number}[] = monthLabels.map((m, i) => ({
       label: m,
       value: Math.max(50, Math.round(base + 60 * Math.sin(i / 2) + (Math.random() - 0.5) * 40)),
     }));
@@ -209,26 +210,46 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setLastUpdate(new Date());
+    toast({
+      title: "Data Refreshed",
+      description: "Tank information has been updated.",
+    });
+  };
+
+  // Check if user is in demo mode
+  const isDemoMode = user?.tankSetup?.wantsDemoMode;
+
   return (
     <ProtectedLayout>
       <div className="space-y-6">
-        {/* ====== HERO / WELCOME ====== */}
+        {/* Demo Mode Enhancement for Hackathon */}
+        {isDemoMode && <HackathonDemoEnhancer />}
+        
+        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-primary">
-              Welcome back, {user?.name || "AquaMind User"}! 👋
+            <h1 className="text-3xl font-bold tracking-tight">
+              {isDemoMode ? '🚀 AquaMind Demo - Water Management Dashboard' : 'Water Management Dashboard'}
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Monitor your water systems with real-time AI insights
+            <p className="text-muted-foreground">
+              {isDemoMode ? 'Live demonstration with AI-powered insights and real-time monitoring' : 'Monitor and manage your water systems in real-time'}
             </p>
           </div>
-          <div className="hidden md:flex items-center gap-3 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <span className="inline-flex h-2 w-2 rounded-full bg-green-500" /> Live monitoring
-            </span>
-            <span className="px-2 py-1 rounded bg-muted">
-              Last update: {lastUpdate.toLocaleTimeString()}
-            </span>
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={handleRefresh}
+              variant="outline"
+              size="sm"
+              disabled={isSimulationRunning}
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+            <div className="text-sm text-muted-foreground">
+              Last updated: {lastUpdate.toLocaleTimeString()}
+            </div>
           </div>
         </div>
 

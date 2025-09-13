@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Admin from "./pages/Admin";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 import ChatWidget from "@/components/ChatWidget";
 import DashboardWrapper from "@/components/DashboardWrapper";
@@ -67,6 +68,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAdmin>
                   <Admin />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
                 </ProtectedRoute>
               }
             />
