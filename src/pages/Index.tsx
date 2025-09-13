@@ -11,8 +11,12 @@ import {
   Users, 
   TrendingUp,
   ChevronRight,
-  CheckCircle
+  CheckCircle,
+  Clock,
+  Bell,
+  BarChart
 } from 'lucide-react';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 /**
  * Index page - Public landing page for AquaMind
@@ -22,38 +26,49 @@ const Index: React.FC = () => {
   const features = [
     {
       icon: BarChart3,
-      title: 'Real-time Monitoring',
-      description: 'Track water levels, consumption, and tank health with live updates every 5 seconds.'
+      title: 'Real-time Tank Monitoring',
+      description: 'Track water levels in individual and community tanks with live updates every 5 seconds.'
     },
     {
       icon: Zap,
-      title: 'AI-Powered Insights',
-      description: 'Predictive analytics and anomaly detection to prevent water shortages before they happen.'
+      title: 'AI Usage Forecasting',
+      description: 'Predict when water will run out based on past usage patterns with 24h, 12h, and 3h advance warnings.'
     },
     {
-      icon: Shield,
-      title: 'Smart Alerts',
-      description: 'Intelligent notifications for low levels, leaks, and maintenance requirements.'
+      icon: Bell,
+      title: 'Smart Alert System',
+      description: 'Timely notifications: 24 hours before depletion, 12 hours before depletion, 3 hours before depletion.'
     },
     {
       icon: Users,
-      title: 'Community Management',
-      description: 'Manage both personal and community water tanks from a single dashboard.'
+      title: 'Community Dashboard',
+      description: 'Shared dashboard for all families/units to see overall consumption and transparency.'
+    },
+    {
+      icon: BarChart,
+      title: 'Monthly/Weekly Reports',
+      description: 'Generate comprehensive water usage reports with AI recommendations and export capabilities.'
+    },
+    {
+      icon: Clock,
+      title: 'Hybrid Model',
+      description: 'Monitor both individual household tanks and community tanks with unified management.'
     }
   ];
 
   const benefits = [
     'Prevent water shortages with 24h advance warnings',
     'Reduce water waste by up to 30% with AI optimization',
-    'Monitor unlimited tanks and communities',
-    'Mobile-responsive design for on-the-go management',
-    'Export reports and analytics for planning'
+    'Build transparency and accountability in communities',
+    'AI chatbot answers natural questions about water usage',
+    'Export monthly/weekly reports for planning and analysis'
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur">
+    <AnimatedBackground>
+      <div className="min-h-screen bg-background/80 backdrop-blur-sm">
+        {/* Header */}
+        <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center space-x-3">
             <Droplets className="h-8 w-8 text-primary animate-wave" />
@@ -115,7 +130,72 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+        {/* AI Chatbot Section */}
+        <section className="py-16 bg-gradient-to-r from-blue-50 to-cyan-50">
+          <div className="container px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">
+                <Zap className="inline w-8 h-8 mr-3 text-blue-500" />
+                AI-Powered Water Assistant
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Ask natural questions about your water system and get intelligent answers
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <Card className="p-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Droplets className="w-5 h-5 text-blue-500" />
+                    Example Questions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm font-medium">"How much water is left in my tank?"</p>
+                  </div>
+                  <div className="p-3 bg-green-50 rounded-lg">
+                    <p className="text-sm font-medium">"How much water did the community use today?"</p>
+                  </div>
+                  <div className="p-3 bg-purple-50 rounded-lg">
+                    <p className="text-sm font-medium">"When should I refill?"</p>
+                  </div>
+                  <div className="p-3 bg-orange-50 rounded-lg">
+                    <p className="text-sm font-medium">"Why is my consumption high today?"</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="p-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Bell className="w-5 h-5 text-green-500" />
+                    Smart Features
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-sm">Voice commands and responses</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-sm">Context-aware responses</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-sm">Real-time system data</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-sm">Predictive insights</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
       <section className="py-20 bg-background">
         <div className="container px-4">
           <div className="text-center mb-16">
@@ -132,7 +212,7 @@ const Index: React.FC = () => {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Card key={index} className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
+                <Card key={index} className="text-center hover-lift water-ripple animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                       <Icon className="w-6 h-6 text-primary" />
@@ -263,7 +343,8 @@ const Index: React.FC = () => {
           </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </AnimatedBackground>
   );
 };
 

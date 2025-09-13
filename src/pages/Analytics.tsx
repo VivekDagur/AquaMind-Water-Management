@@ -1,6 +1,5 @@
 import React from 'react';
 import { ProtectedLayout } from '@/components/ProtectedLayout';
-import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -77,17 +76,13 @@ const Analytics: React.FC = () => {
           <AlertDescription className="text-blue-800">
             <strong>📊 Where Your Website Data is Stored:</strong><br/>
             <div className="mt-2 space-y-1 text-sm">
-              <div>• <strong>Google Analytics 4:</strong> Visitor behavior, page views, conversion tracking (cloud-based)</div>
-              <div>• <strong>Browser Local Storage:</strong> Demo interactions, session data (client-side)</div>
               <div>• <strong>MongoDB Atlas:</strong> User accounts, tank data, chat conversations (cloud database)</div>
-              <div>• <strong>Railway Logs:</strong> Backend API requests, server performance (hosting platform)</div>
+              <div>• <strong>Browser Local Storage:</strong> Demo interactions, session data (client-side)</div>
+              <div>• <strong>Backend Logs:</strong> API requests, server performance (hosting platform)</div>
               <div>• <strong>Netlify Analytics:</strong> Frontend deployment metrics, CDN performance (hosting platform)</div>
             </div>
           </AlertDescription>
         </Alert>
-
-        {/* Main Analytics Dashboard */}
-        <AnalyticsDashboard />
 
         {/* Additional Information for Judges */}
         <Card className="border-2 border-dashed border-yellow-300 bg-yellow-50">

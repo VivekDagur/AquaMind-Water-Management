@@ -17,8 +17,6 @@ import { calculateKPIs, generateHistoricalData, type Tank, mockTanks } from "@/u
 import { apiClient } from "@/utils/api";
 import { getSensorInstance, startSensorSimulation } from "@/utils/sensors";
 import { useToast } from "@/hooks/use-toast";
-import HackathonDemoEnhancer from '@/components/HackathonDemoEnhancer';
-import { demoTanks, demoKPIs, demoAlerts, demoUsageData } from '@/components/EnhancedDemoData';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -225,7 +223,6 @@ const Dashboard: React.FC = () => {
     <ProtectedLayout>
       <div className="space-y-6">
         {/* Demo Mode Enhancement for Hackathon */}
-        {isDemoMode && <HackathonDemoEnhancer />}
         
         {/* Header */}
         <div className="flex items-center justify-between">
