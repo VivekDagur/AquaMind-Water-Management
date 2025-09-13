@@ -10,15 +10,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const checkAuth = () => {
       if (authToken) {
-        // Mock user data based on stored token
-        const mockUser: User = {
-          id: '1',
-          email: 'user@aquamind.com',
-          name: 'AquaMind User',
-          role: 'user',
-          setupCompleted: false
-        };
-        setUser(mockUser);
+        try {
+          // Check if there's a stored user in localStorage
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            const user = JSON.parse(storedUser);
+            setUser(user);
+          } else {
+            // Fallback to mock user
+            const mockUser: User = {
+              id: '1',
+              email: 'user@aquamind.com',
+              name: 'AquaMind User',
+              role: 'user',
+              setupCompleted: false
+            };
+            setUser(mockUser);
+          }
+        } catch (error) {
+          console.error('Auth initialization error:', error);
+          setAuthToken(null);
+          localStorage.removeItem('user');
+        }
         setIsLoading(false);
       } else {
         setUser(null);

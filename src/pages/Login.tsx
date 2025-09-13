@@ -1,13 +1,37 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Droplets, Zap } from 'lucide-react';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  
   const handleDemoMode = () => {
-    // Simple demo mode - just redirect to dashboard
-    window.location.href = '/dashboard';
+    // Set demo user in localStorage and navigate to dashboard
+    const demoUser = {
+      id: 'demo-user',
+      email: 'demo@aquamind.com',
+      name: 'Demo User',
+      role: 'user',
+      setupCompleted: true,
+      tankSetup: {
+        hasPhysicalTank: false,
+        tankCount: 3,
+        tankType: 'residential',
+        location: 'Demo Location',
+        capacity: '5000',
+        currentLevel: '3500',
+        sensorConnected: true,
+        wantsDemoMode: true
+      }
+    };
+    
+    localStorage.setItem('authToken', 'demo-token');
+    localStorage.setItem('user', JSON.stringify(demoUser));
+    
+    // Navigate to dashboard
+    navigate('/dashboard');
   };
 
   return (
