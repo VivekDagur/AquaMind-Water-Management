@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-**Live Demo**: https://cheery-druid-3ad0d6.netlify.app
+**Live Demo**: https://aquamind-hydrology.netlify.app
 **Backend API**: https://aquamind-water-management-production.up.railway.app
 
 AquaMind is a comprehensive smart water management platform that provides real-time monitoring, AI-powered insights, and intelligent alerts for water systems. The system helps optimize water usage, prevent wastage, and ensure efficient resource management.
@@ -79,7 +79,7 @@ To use a custom domain like AquaMind.com:
 
 1. **Purchase domain** from a registrar (GoDaddy, Namecheap, etc.)
 2. **Configure DNS** in your domain registrar:
-   - Add CNAME record: `www` → `cheery-druid-3ad0d6.netlify.app`
+   - Add CNAME record: `www` → `https://aquamind-hydrology.netlify.app`
    - Add A record: `@` → `75.2.60.5` (Netlify's load balancer)
 3. **Add domain in Netlify**:
    - Go to Site settings → Domain management
