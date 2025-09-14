@@ -20,7 +20,16 @@ app.use(express.json()); // must come before routes
 
 // ✅ Health check route
 app.get("/", (req, res) => {
-  res.send("Server is working! 🚀");
+  res.status(200).json({ 
+    status: "healthy", 
+    message: "AquaMind Server is running! 🚀",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// ✅ Health check route for Railway
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
 });
 
 // ✅ Mount routes first (before DB connection)
